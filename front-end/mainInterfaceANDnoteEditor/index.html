@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="css/style.mainInterface.css">
+</head>
+
+<body>
+	<div style="display: flex; align-items: center; justify-content: space-between;">
+		<h1 id="first-heading"><span style="text-decoration: underline;">Great</span> <span style="text-decoration: underline;">Notes</span></h1>
+		<button id="logout-btn">LOGOUT</button>	
+	</div>
+	<div class="navigation-buttons"><button id="navigation-buttons-backBtn">Back</button></div>
+	<div id="breadcrumbContainer"></div>
+	<div id="folder-note-container"></div>
+
+	<!-- "create folder" dialog box -->
+	<dialog class="create-dialog-class" id="create-folder-dialog">
+		<div class="model-div">
+			<h2 style="text-align: center;">New Folder</h2>
+			<input autocomplete="off" spellcheck="false"
+				style='border-radius: 7px; font-family: "Montserrat", sans-serif; padding: 0 0.8em; font-weight: 600;'
+				type="text" name="newFolderName" id="new-folder-name">
+			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
+				<button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+					id="cancel-new-folder">Cancel</button>
+				<button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+					id="okay-new-folder">Okay</button>
+			</div>
+		</div>
+	</dialog>
+
+	<!-- "create note" dialog box -->
+	<dialog class="create-dialog-class" id="create-note-dialog">
+		<div class="model-div">
+			<h2 style="text-align: center;">New Note</h2>
+			<input autocomplete="off" spellcheck="false"
+				style='border-radius: 7px; font-family: "Montserrat", sans-serif; padding: 0 0.8em; font-weight: 600;'
+				type="text" name="newFolderName" id="new-note-name">
+			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
+				<button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+					id="cancel-new-note">Cancel</button>
+				<button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+					id="okay-new-note">Okay</button>
+			</div>
+		</div>
+	</dialog>
+
+	<!-- "move to folder" dialog box -->
+	<dialog class="move-to-folder-dialog-class" id="move-to-folder-dialog">
+		<div class="move-to-folder-dialog-main-container">
+			<div style="font-size: 1.7rem; text-align: center; font-weight: 700;">Move to...</div>
+
+			<div class="move-to-folder-dialog-main-container-items"></div>
+
+			<div style='text-align: center; font-family: "Montserrat", sans-serif; margin-top: 0.7em; font-size: 0.8em;'
+				id="move-to-folder-dialog-messageDIV"></div>
+
+			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
+				<button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+					id="cancel-move-to-folder">Cancel</button>
+				<button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+					id="okay-move-to-folder">Okay</button>
+			</div>
+		</div>
+	</dialog>
+
+	<!-- confirmation krne ka dialog-box -->
+	<dialog class="create-dialog-class" id="confirmation-dialog">
+		<div class="model-div">
+			<h3 style="text-align: center;">Are you sure you want to <span></span></h2>
+				<div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
+					<button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+						id="cancel-confirmation">No</button>
+					<button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+						id="okay-confirmation">Yes</button>
+				</div>
+		</div>
+	</dialog>
+
+
+
+
+	<!-- "add item" vala button aur uspe click krne ke baad open hone wali menu-->
+	<div id="add-btn">+</div>
+	<div class="add-btn-tooltip">Add Item</div>
+
+	<div id="add-btn-menu-id" class="add-btn-menu">
+		<button id="add-btn-menu-create-note">Create Note</button>
+		<button id="add-btn-menu-create-folder">Create Folder</button>
+	</div>
+
+
+
+
+
+	<!-- templates and context-menu below -->
+	<template id="folder-icon-template">
+		<div draggable="true" class="icon">
+			<img draggable="false" style="height: 60px;" src="images/folder.png" alt="">
+			<p id="main-paragraph-of-folder"></p>
+		</div>
+	</template>
+	
+	<template id="note-icon-template">
+		<div draggable="true" class="icon">
+			<img draggable="false" style="height: 60px;" src="images/note.png" alt="">
+			<p id="main-paragraph-of-note"></p>
+		</div>
+	</template>
+
+	<div id="custom-context-menu">
+		<ul>
+			<li id="ccm-move-to-folder-li">Move To Folder</li>
+			<button disabled id="ccm-move-to-root-btn">Move To Root</button>
+			<li id="ccm-delete-li">Delete</li>
+			<li id="ccm-rename-li">Rename</li>
+		</ul>
+	</div>
+
+	<!-- <script src="js/logic/state.js"></script> -->
+	<script src="js/logic/api.js"></script>
+	<script type="text/javascript" src="js/script.mainInterface.js"></script>
+</body>
+</html>

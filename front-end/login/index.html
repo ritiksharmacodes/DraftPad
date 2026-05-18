@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+
+    <script>
+		const token = localStorage.getItem('token');
+		if (token) {
+			(async () => {
+				try {
+					const resp = await fetch('http://localhost:5050/verifyJWT', {
+						method: "GET",
+						mode: "cors",
+						headers: {
+							"Authorization": `Bearer ${token}`
+						}
+					});
+					const respJson = await resp.json();
+
+					if (parseInt(resp.status) === 200) {
+						window.location.href = '../mainInterfaceANDnoteEditor/index.html';
+					}
+					else throw new Error('Error occurred: ' + respJson);
+					
+				} catch (error) {
+					console.log(error);
+				}
+			})();
+		}
+
+	</script>
+</head>
+
+<body>
+
+    <div class="form-popup">
+        <div class="form-box login">
+            <div class="form-details">
+                <h2 style="line-height: 40px;">Welcome Back to the Notes-app</h2>
+            </div>
+            <div class="form-content">
+                <h2 style="color: #02225B;">LOGIN</h2>
+                <form id="login_form" autocomplete="off" action="#">
+                    <div class="input-field">
+                        <input id="login_email" type="text" required>
+                        <label>Email</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="login_password" type="password" required>
+                        <label>Password</label>
+                    </div>
+                    <div id="login-msg-div"></div>
+                    <button type="submit">Log In</button>
+                </form>
+                <div class="bottom-link">
+                    Don't have an account?
+                    <a href="#" id="signup-link">Signup</a>
+                    <p>...or, you can</p>
+
+                    <!-- below code is for the google Oauth btn -->
+                    <div id="g_id_onload"
+                        data-client_id="851879992930-njadf1judugnijogfvaaqoam4qs0g9ck.apps.googleusercontent.com"
+                        data-callback="handleCredentialResponse"></div>
+                    <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue"
+                        data-text="signin_with" data-size="large" data-logo_alignment="left">
+                    </div>
+                    <script>
+                        google.accounts.id.initialize({
+                            client_id: '851879992930-njadf1judugnijogfvaaqoam4qs0g9ck.apps.googleusercontent.com',
+                            callback: handleCredentialResponse
+                        });
+
+                        function handleCredentialResponse(response) {
+                            const responsePayload = decodeJwtResponse(response.credential);
+                            console.log();
+
+                            (async () => {
+                                try {
+                                    const respFromServer = await fetch('http://localhost:5050/auth/google', {
+                                        method: 'POST',
+                                        mode: 'cors',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ id_token: response.credential })
+                                    });
+                                    const jsonData = await respFromServer.json();                                    
+
+                                    // agar sab sahi toh hume JWT mil jaega and inserting the token into the localstorage
+                                    localStorage.clear();
+                                    localStorage.token = jsonData.token;
+                                    window.location.href = '../mainInterfaceANDnoteEditor/index.html';
+
+                                } catch (error) {
+                                    console.error(error);
+                                }
+                            })();
+                        }
+
+                        function decodeJwtResponse(token) {
+                            let base64Url = token.split('.')[1];
+                            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                            let jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                            }).join(''));
+
+                            return JSON.parse(jsonPayload);
+                        }
+                    </script>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="form-box signup">
+            <div class="form-details">
+                <h2 style="line-height: 40px;">Join the Notes-app Community</h2>
+            </div>
+            <div class="form-content">
+                <h2 style="color: #02225B;">SIGNUP</h2>
+                <form id="signup_form" autocomplete="off" action="#">
+                    <div class="input-field">
+                        <input id="email_ip" name="email" type="text" required>
+                        <label>Enter your email</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="username_ip" name="username" type="text" required>
+                        <label>Enter username</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="create_pwd_ip_box" name="password" type="password" required>
+                        <label>Create password</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="password_ip" type="password" required>
+                        <label>Confirm password</label>
+                    </div>
+                    <div id="confirm-password-msg"></div>
+                    <div id="signup-msg-div"></div>
+                    <button type="submit">Sign Up</button>
+                </form>
+                <div class="bottom-link">
+                    Already have an account?
+                    <a href="#" id="login-link">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

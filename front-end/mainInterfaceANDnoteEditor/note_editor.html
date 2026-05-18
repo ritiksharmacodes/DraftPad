@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="css/style.noteEditor.css">
+
+    <!-- tippy ki css below -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
+    <!-- quill ki css -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+
+<body>
+    <!-- quill ki js below -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <!-- tippy ki js below -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
+
+    <!-- MAIN SAARA KAAM NEECHE SE -->
+    <header>
+        <h1 data-tippy-content="Title Of The Note" contenteditable="true" id="note-title" style="margin-right: auto;">note_title</h1>
+        <button data-tippy-content="Save" class="upar-wale-buttons" id="save-btn"><img src="images/save-btn.png"
+                alt=""></button>
+        <button data-tippy-content="Delete" class="upar-wale-buttons" id="delete-btn"><img src="images/delete-btn.png"
+                alt=""></button>
+        <button data-tippy-content="Export" class="upar-wale-buttons" id="export-btn"><img src="images/export-btn.png"
+                alt=""></button>
+    </header>
+
+    <h3 data-tippy-placement="bottom" data-tippy-content="Note Created At" id="note-timestamps" style="width: fit-content; margin: 1em 3.5em 0 3.5em;">note_timestamps</h3>
+
+    <main>
+        <div id="editor" class="main-note-editor"></div>
+        <div>
+            <div id="text-edit-buttons">
+                <h1 style="text-align: center; margin-top: -30px; border-bottom: 1px solid black;">Toolbar</h1>
+                <div
+                    style="display: flex; justify-content: space-between; flex-direction: column; border-bottom: 1px solid black;">
+                    <h3 style="text-align: center; ">Font</h3>
+                    <div style="display: flex; justify-content: center;">
+                        <span class="ql-formats">
+                            <select data-tippy-content="Font Family" class="ql-font"></select>
+                            <select data-tippy-content="Font Size" class="ql-size"></select>
+                        </span>
+                    </div>
+                    <div style="display: flex; justify-content: center; margin-top: 1em; margin-bottom: 1em;">
+                        <span class="ql-formats">
+                            <button data-tippy-content="Bold" class="ql-bold"></button>
+                            <button data-tippy-content="Italic" class="ql-italic"></button>
+                            <button data-tippy-content="Underline" class="ql-underline"></button>
+                            <button data-tippy-content="Strikethrough " class="ql-strike"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <select data-tippy-content="Font Color" class="ql-color"></select>
+                            <select data-tippy-content="Font Background Color" class="ql-background"></select>
+                        </span>
+                    </div>
+                </div>
+
+                <div
+                    style="display: flex; justify-content: space-between; flex-direction: column; border-bottom: 1px solid black;">
+                    <h3 style="text-align: center; ">Indentation and Alignment</h3>
+                    <div style="display: flex; justify-content: center; margin-bottom: 1em;">
+                        <span class="ql-formats">
+                            <button data-tippy-content="Indentation -1" class="ql-indent" value="-1"></button>
+                            <button data-tippy-content="Indentation +1" class="ql-indent" value="+1"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button data-tippy-content="Text Direction" class="ql-direction" value="rtl"></button>
+                            <select data-tippy-content="Text Alignment" class="ql-align"></select>
+                        </span>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; flex-direction: column;">
+                    <h3 style="text-align: center; ">Insert</h3>
+                    <div style="display: flex; justify-content: center; margin-bottom: 1em;">
+                        <span class="ql-formats">
+                            <button data-tippy-content="Insert Ordered List" class="ql-list" value="ordered"></button>
+                            <button data-tippy-content="Insert Unordered List" class="ql-list" value="bullet"></button>
+                            <button data-tippy-content="Insert Blockquote" class="ql-blockquote"></button>
+                            <button data-tippy-content="Insert Link" class="ql-link"></button>
+                            <button data-tippy-content="Insert Image" class="ql-image"></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="image-height-width-change-div-class">
+                <div style="height: 2em;"><span id="close-krne-ka-span-of-img-hANDw">X</span></div>
+                <div style="display: flex; flex-direction: column; gap: 1em;">
+                    <div>
+                        <label for="editor-ki-img-ki-height-ip">Height:</label>
+                        <input style="border-radius: 10px; padding-left: 1em; padding-right: 1em;"
+                            id="editor-ki-img-ki-height-ip" type="number">
+                    </div>
+                    <div>
+                        <label for="editor-ki-img-ki-width-ip">Width:&nbsp;</label>
+                        <input style="border-radius: 10px; padding-left: 1em; padding-right: 1em;"
+                            id="editor-ki-img-ki-width-ip" type="number">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- <footer> -->
+    <!-- <div id="text-edit-buttons">
+            <button data-tippy-content="Add Image" class="neeche-wale-buttons ql-image" id="add-img-btn"><img
+                    src="images/add-image.png" alt=""></button>
+            <button data-tippy-content="Add Checkbox" class="neeche-wale-buttons" id="add-checkbox-btn"><img
+                    src="images/add-checkbox.png" alt=""></button>
+            <button data-tippy-content="Text Styling" class="neeche-wale-buttons" id="font-editting-btn"><img
+                    src="images/font-edit.png" alt=""></button>
+            <button data-tippy-content="Add List" class="neeche-wale-buttons" id="add-normal-list-btn"><img
+                    src="images/add-list.png" alt=""></button>
+        </div>
+        <div id="text-styling-options" class="text-styling-options-class">
+            <button>X</button>
+            <p>Kuch bhi maal masala andar iske</p>
+        </div>
+        <div id="image-edit-drawer" class="text-styling-options-class">
+            <button>X</button>
+            <span class="ql-formats">
+                <button class="ql-direction" value="rtl"></button>
+                <select class="ql-align"></select>
+            </span>
+            <div style="display: flex; gap: 1em; margin-right: auto;">
+                <div>
+                    <label for="editor-ki-img-ki-height-ip">Height:</label>
+                    <input style="border-radius: 10px; padding-left: 1em; padding-right: 1em;"
+                        id="editor-ki-img-ki-height-ip" type="number">
+                </div>
+                <div>
+                    <label for="editor-ki-img-ki-width-ip">Width:</label>
+                    <input style="border-radius: 10px; padding-left: 1em; padding-right: 1em;"
+                        id="editor-ki-img-ki-width-ip" type="number">
+                </div>
+            </div>
+        </div> -->
+    <!-- </footer> -->
+
+
+    <div id="export-btn-menu-id" class="export-btn-menu">
+        <a href="#" id="export-btn-menu-as-text">As Docx</a>
+        <a href="#" id="export-btn-menu-as-pdf">As PDF</a>
+        <!-- <button  ></button> -->
+        <!-- <button id="export-btn-menu-as-pdf">As PDF</button> -->
+    </div>
+
+    <!-- confirmation krne ka dialog-box -->
+    <dialog class="create-dialog-class" id="confirmation-dialog">
+        <div class="model-div">
+            <h3 style="text-align: center;">Are you sure you want to <span></span></h2>
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
+                    <button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+                        id="cancel-confirmation">No</button>
+                    <button style='padding: 0.2em 0.9em; cursor: pointer; font-family: "Montserrat", sans-serif;'
+                        id="okay-confirmation">Yes</button>
+                </div>
+        </div>
+    </dialog>
+
+    <!-- loader with a dialog box -->
+    <!-- <dialog id="loader-dialog-box">
+        <div class="loader">Loading</span>
+    </dialog> -->
+    
+
+
+
+
+    <!-- apni saari js below -->
+    <script src="js/script.noteEditor.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</body>
+
+</html>
