@@ -13,7 +13,7 @@
 		if (token) {
 			(async () => {
 				try {
-					const resp = await fetch('http://localhost:5050/verifyJWT', {
+					const resp = await fetch('https://draftpad.onrender.com/verifyJWT', {
 						method: "GET",
 						mode: "cors",
 						headers: {
@@ -81,7 +81,7 @@
 
                             (async () => {
                                 try {
-                                    const respFromServer = await fetch('http://localhost:5050/auth/google', {
+                                    const respFromServer = await fetch('https://draftpad.onrender.com/auth/google', {
                                         method: 'POST',
                                         mode: 'cors',
                                         headers: {

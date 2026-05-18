@@ -1,4 +1,4 @@
-const addressOfTheServer = `http://localhost:5050/`;
+const addressOfTheServer = `https://draftpad.onrender.com/`;
 // "Authorization": `Bearer ${localStorage.token}`
 
 const fetchAllFolders = async function () {
