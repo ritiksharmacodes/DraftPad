@@ -34,7 +34,7 @@ signupForm.addEventListener('submit', (e) => {
                     auth_provider: 'local'
                 };
 
-                const resp = await fetch('${window.ADDRESS_OF_THE_SERVER}signup', {
+                const resp = await fetch(`${window.ADDRESS_OF_THE_SERVER}signup`, {
                     method: "POST",
                     mode: "cors",
                     headers: {
