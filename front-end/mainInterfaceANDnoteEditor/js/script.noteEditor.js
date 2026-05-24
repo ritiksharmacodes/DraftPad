@@ -19,7 +19,7 @@ const quill = new Quill('#editor', {
 //     theme: 'snow',
 // });
 
-const addressOfTheServer = `http://localhost:5050/`;
+const addressOfTheServer = `${window.ADDRESS_OF_THE_SERVER}`;
 const addressOfTheFrontWebsite = '../index.html';
 
 
@@ -532,7 +532,7 @@ async function makeRequestForExportAsText(data) {
             mode: "cors"
         };
 
-        fetch(`http://localhost:5050/exportAsText`, options)
+        fetch(`${window.ADDRESS_OF_THE_SERVER}exportAsText`, options)
             .then((response) => response.blob())
             .then((myBlob) => {
                 // neeche waali 2 lines taaki note ka title mil sake
@@ -564,7 +564,7 @@ async function makeRequestForExportAsPdf(data) {
             mode: "cors"
         };
 
-        fetch(`http://localhost:5050/exportAsPdf`, options)
+        fetch(`${window.ADDRESS_OF_THE_SERVER}exportAsPdf`, options)
             .then((response) => response.blob())
             .then((myBlob) => {
                 // neeche waali 2 lines taaki note ka title mil sake

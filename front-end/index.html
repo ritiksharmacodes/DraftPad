@@ -3,6 +3,8 @@
 
 <head>
 
+	<script src="js/config.js"></script>
+
 	<!-- Basic Page Needs
   ================================================== -->
 	<meta charset="utf-8">
@@ -38,7 +40,7 @@
 		if (token) {
 			(async () => {
 				try {
-					const resp = await fetch('http://localhost:5050/verifyJWT', {
+					const resp = await fetch(`${window.ADDRESS_OF_THE_SERVER}verifyJWT`, {
 						method: "GET",
 						mode: "cors",
 						headers: {

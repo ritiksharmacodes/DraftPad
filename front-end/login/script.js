@@ -34,7 +34,7 @@ signupForm.addEventListener('submit', (e) => {
                     auth_provider: 'local'
                 };
 
-                const resp = await fetch('http://localhost:5050/signup', {
+                const resp = await fetch('${window.ADDRESS_OF_THE_SERVER}signup', {
                     method: "POST",
                     mode: "cors",
                     headers: {
@@ -120,7 +120,7 @@ loginForm.addEventListener('submit', (e)=>{
                 email: loginEmailIp.value,
                 password: loginPasswordIp.value,
             };
-            const resp = await fetch(`http://localhost:5050/login`, {
+            const resp = await fetch(`${window.ADDRESS_OF_THE_SERVER}login`, {
                 method: "POST",
                 mode: "cors",
                 headers: {

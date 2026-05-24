@@ -1,5 +1,5 @@
-const addressOfTheServer = `http://localhost:5050/`;
-// "Authorization": `Bearer ${localStorage.token}`
+const addressOfTheServer = `${window.ADDRESS_OF_THE_SERVER}`;
+
 
 const fetchAllFolders = async function () {
     try {

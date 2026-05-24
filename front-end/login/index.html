@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <script src="../js/config.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://accounts.google.com/gsi/client" async></script>
@@ -14,7 +16,7 @@
 		if (token) {
 			(async () => {
 				try {
-					const resp = await fetch('http://localhost:5050/verifyJWT', {
+					const resp = await fetch(`${window.ADDRESS_OF_THE_SERVER}verifyJWT`, {
 						method: "GET",
 						mode: "cors",
 						headers: {
@@ -86,7 +88,7 @@
 
                             (async () => {
                                 try {
-                                    const respFromServer = await fetch('http://localhost:5050/auth/google', {
+                                    const respFromServer = await fetch('${window.ADDRESS_OF_THE_SERVER}auth/google', {
                                         method: 'POST',
                                         mode: 'cors',
                                         headers: {

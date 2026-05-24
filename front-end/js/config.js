@@ -1,0 +1,1 @@
+window.ADDRESS_OF_THE_SERVER = "https://draftpad.onrender.com/";
