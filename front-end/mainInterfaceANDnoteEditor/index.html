@@ -6,14 +6,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="css/style.mainInterface.css">
+	<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet" />
 </head>
 
 <body>
 	<div style="display: flex; align-items: center; justify-content: space-between;">
-		<h1 id="first-heading"><span style="text-decoration: underline;">Great</span> <span style="text-decoration: underline;">Notes</span></h1>
-		<button id="logout-btn">LOGOUT</button>	
+		<!-- <h1 id="first-heading">DraftPad</h1> -->
+		<div class="navigation-buttons"><button id="navigation-buttons-backBtn">Back</button></div>
+		<button id="logout-btn">LOGOUT</button>
 	</div>
-	<div class="navigation-buttons"><button id="navigation-buttons-backBtn">Back</button></div>
 	<div id="breadcrumbContainer"></div>
 	<div id="folder-note-container"></div>
 
@@ -104,7 +105,7 @@
 			<p id="main-paragraph-of-folder"></p>
 		</div>
 	</template>
-	
+
 	<template id="note-icon-template">
 		<div draggable="true" class="icon">
 			<img draggable="false" style="height: 60px;" src="images/note.png" alt="">
@@ -114,15 +115,39 @@
 
 	<div id="custom-context-menu">
 		<ul>
+			<li id="ccm-view-note-li">View</li>
+			<li id="ccm-edit-note-li">Edit</li>
 			<li id="ccm-move-to-folder-li">Move To Folder</li>
-			<button disabled id="ccm-move-to-root-btn">Move To Root</button>
+			<li id="ccm-move-to-root-btn">Move To Root</li>
 			<li id="ccm-delete-li">Delete</li>
 			<li id="ccm-rename-li">Rename</li>
 		</ul>
 	</div>
 
-	<!-- <script src="js/logic/state.js"></script> -->
+	<!-- note preview modal -->
+	<dialog class="create-dialog-class" id="note-preview-dialog">
+
+		<div id="note-preview-top-bar">
+			<p id="note-preview-title"></p>
+
+			<div id="note-preview-btns">
+				<button id="note-preview-edit-btn">Edit</button>
+				<button id="note-preview-close-btn">Close</button>
+			</div>
+		</div>
+
+		<div id="note-preview-editor-container">
+			<div id="note-preview-editor"></div>
+		</div>
+
+	</dialog>
+
+
+	<!-- main scripts below -->
+	<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>	
 	<script src="js/logic/api.js"></script>
 	<script type="text/javascript" src="js/script.mainInterface.js"></script>
+
 </body>
+
 </html>

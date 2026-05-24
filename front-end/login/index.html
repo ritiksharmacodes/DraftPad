@@ -7,13 +7,14 @@
     <script src="https://accounts.google.com/gsi/client" async></script>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
 
     <script>
 		const token = localStorage.getItem('token');
 		if (token) {
 			(async () => {
 				try {
-					const resp = await fetch('https://draftpad.onrender.com/verifyJWT', {
+					const resp = await fetch('http://localhost:5050/verifyJWT', {
 						method: "GET",
 						mode: "cors",
 						headers: {
@@ -41,7 +42,7 @@
     <div class="form-popup">
         <div class="form-box login">
             <div class="form-details">
-                <h2 style="line-height: 40px;">Welcome Back to the Notes-app</h2>
+                <h2 style="line-height: 40px;">Welcome Back to DraftPad</h2>
             </div>
             <div class="form-content">
                 <h2 style="color: #02225B;">LOGIN</h2>
@@ -50,10 +51,14 @@
                         <input id="login_email" type="text" required>
                         <label>Email</label>
                     </div>
-                    <div class="input-field">
+
+                    <!--made changes below-->
+                    <div class="input-field password-container">
                         <input id="login_password" type="password" required>
                         <label>Password</label>
+                        <i class="ri-eye-line toggle-password-eye"></i>                    
                     </div>
+
                     <div id="login-msg-div"></div>
                     <button type="submit">Log In</button>
                 </form>
@@ -76,12 +81,12 @@
                         });
 
                         function handleCredentialResponse(response) {
-                            const responsePayload = decodeJwtResponse(response.credential);
-                            console.log();
+                            // Uncomment below line if you want to inspect or use the user's Google profile information (name, email, profile picture) directly on the frontend UI.
+                            // const responsePayload = decodeJwtResponse(response.credential);                            
 
                             (async () => {
                                 try {
-                                    const respFromServer = await fetch('https://draftpad.onrender.com/auth/google', {
+                                    const respFromServer = await fetch('http://localhost:5050/auth/google', {
                                         method: 'POST',
                                         mode: 'cors',
                                         headers: {
@@ -92,9 +97,9 @@
                                     const jsonData = await respFromServer.json();                                    
 
                                     // agar sab sahi toh hume JWT mil jaega and inserting the token into the localstorage
-                                    localStorage.clear();
+                                    localStorage.clear(); // to flush any stale authentication footprint
                                     localStorage.token = jsonData.token;
-                                    window.location.href = '../mainInterfaceANDnoteEditor/index.html';
+                                    window.location.href = '../mainInterfaceANDnoteEditor/index.html'; // moving the user into their working space
 
                                 } catch (error) {
                                     console.error(error);
@@ -119,7 +124,7 @@
         </div>
         <div class="form-box signup">
             <div class="form-details">
-                <h2 style="line-height: 40px;">Join the Notes-app Community</h2>
+                <h2 style="line-height: 40px;">Join the DraftPad app Community</h2>
             </div>
             <div class="form-content">
                 <h2 style="color: #02225B;">SIGNUP</h2>
@@ -132,14 +137,21 @@
                         <input id="username_ip" name="username" type="text" required>
                         <label>Enter username</label>
                     </div>
-                    <div class="input-field">
+
+                    <!--made changes-->
+                    <div class="input-field password-container">
                         <input id="create_pwd_ip_box" name="password" type="password" required>
                         <label>Create password</label>
+                        <i class="ri-eye-line toggle-password-eye"></i>
                     </div>
-                    <div class="input-field">
+                    
+                    <!--made changes-->
+                    <div class="input-field password-container">
                         <input id="password_ip" type="password" required>
                         <label>Confirm password</label>
+                        <i class="ri-eye-line toggle-password-eye"></i>
                     </div>
+
                     <div id="confirm-password-msg"></div>
                     <div id="signup-msg-div"></div>
                     <button type="submit">Sign Up</button>

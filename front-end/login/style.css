@@ -170,3 +170,31 @@ form button:hover {
     color: red !important;
     font-weight: 600;
 }
+
+
+
+/* Eye Icon Toggle Styling */
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 45px; /* Ensures text doesn't slide under the icon */
+}
+
+.toggle-password-eye {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2rem; /* Remix Icons scale beautifully at this size */
+    color: #8c8c8c; /* Neutral, clean aesthetic grey */
+    transition: color 0.2s ease;
+    z-index: 10;
+}
+
+/* Give the user interactive feedback on hover */
+.toggle-password-eye:hover {
+    color: #4a4a4a;
+}

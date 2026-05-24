@@ -6,7 +6,7 @@
 	<!-- Basic Page Needs
   ================================================== -->
 	<meta charset="utf-8">
-	<title>Notes Web Application - Great Notes</title>
+	<title>DraftPad - Notes Web Application</title>
 
 	<!-- Mobile Specific Metas
   ================================================== -->
@@ -38,7 +38,7 @@
 		if (token) {
 			(async () => {
 				try {
-					const resp = await fetch('https://draftpad.onrender.com/verifyJWT', {
+					const resp = await fetch('http://localhost:5050/verifyJWT', {
 						method: "GET",
 						mode: "cors",
 						headers: {
@@ -68,7 +68,7 @@
 	<nav style="height: 60px;" class="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-0">
 		<div class="container">
 			<a style='margin: auto; font-family: "Montserrat", sans-serif; font-weight: 900; font-size: 2rem;'
-				class="navbar-brand" href="index.html">Notes-app</a>
+				class="navbar-brand" href="index.html">DraftPad</a>
 		</div>
 	</nav>
 
@@ -99,7 +99,7 @@
 				<div
 					class="col-md-12 order-2 order-md-1 text-center text-md-left d-flex flex-column align-items-center h-100">
 					<h1 class="text-white font-weight-bold mb-4">Build notes Fastly and Securely</h1>
-					<p class="text-white mb-5">With Notes-app you can build amazing notes and make your ideas come to
+					<p class="text-white mb-5">With DraftPad app you can build amazing notes and make your ideas come to
 						life with the promise of reliable security-mechanism</p>
 					<a href="./login/index.html" class="btn btn-main-md">Get Started</a>
 				</div>
@@ -121,13 +121,13 @@
 					<div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center">
 						<i class="ti-shine text-primary h1"></i>
 						<h3 class="mt-4 text-capitalize h5 ">powerful design</h3>
-						<p class="regular text-muted">With the usage of browser features Notes-app provides the user
+						<p class="regular text-muted">With the usage of browser features DraftPad provides the user
 							with a powerful way of storing their ideas</p>
 					</div>
 					<div class="col-lg-4 col-md-12 mt-5 mt-lg-0 text-center">
 						<i class="ti-thought text-primary h1"></i>
 						<h3 class="mt-4 text-capitalize h5 ">organized ideas</h3>
-						<p class="regular text-muted">Notes-app keeps notes organized into different folders which make
+						<p class="regular text-muted">DraftPad keeps notes organized into different folders which make
 							it very simple and efficient to store and retrieve ideas</p>
 						</p>
 					</div>

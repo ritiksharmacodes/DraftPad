@@ -19,7 +19,7 @@ const quill = new Quill('#editor', {
 //     theme: 'snow',
 // });
 
-const addressOfTheServer = `https://draftpad.onrender.com/`;
+const addressOfTheServer = `http://localhost:5050/`;
 const addressOfTheFrontWebsite = '../index.html';
 
 
@@ -71,7 +71,7 @@ window.addEventListener('load', () => {
         const noteIDKa = (fnc_items_already_loaded.filter((cur) => cur.id === parseInt(idOfTheNote) && cur.type === 'note')).find((cur, ind) => ind === 0);
 
         // initial data daaling below at on load
-        document.querySelector('title').textContent = noteIDKa.title + " - Note Editor - Great Notes";
+        document.querySelector('title').textContent = noteIDKa.title + " - Note Editor - DraftPad";
         noteTitle.textContent = noteIDKa.title;
 
         // neeche database ke timestamp ko normal timestamp mein convert kring
@@ -100,32 +100,6 @@ window.addEventListener('load', () => {
             delay: [1000, 0] // aane mein delay kr 1s ka but jaane mein bilkul bhi delay mt kar
         });
 
-        // ab main kaam shuru hoga neeche se -->
-        // (async () => {
-        // try {
-        // const navArrFromSessionStorage = JSON.parse(sessionStorage.navigationArray);
-        // console.log(navArrFromSessionStorage);
-        // returnedData = await window.allFetcherFunctions.fetchTheChildrenOfParentIDFunc(navArrFromSessionStorage[navArrFromSessionStorage.length - 1]);
-
-        // if ((typeof returnedData) === 'string' && returnedData.includes('401')) {
-        //     window.location.href = '/front-end/website.html';
-        //     console.log(returnedData);
-        // }
-        // else {
-        // if (navArrFromSessionStorage[navArrFromSessionStorage.length - 1] === null) navBackBtn.setAttribute('disabled', "true");
-
-        // if (!(sessionStorage.getItem('folder_note_container_items_already_loaded'))) {
-        //     //console.log( JSON.parse( sessionStorage.getItem('folder_note_container_items_already_loaded') ) );
-        //     sessionStorage.setItem('folder_note_container_items_already_loaded', JSON.stringify([returnedData]));
-        // }
-        // generateBreadcrumbs();
-        // renderTheReceivedDataFunction(returnedData);
-        //     }
-
-        // } catch (error) {
-        //     console.error(error);
-        // }
-        // })();
     }
     else {
         if (localStorage.hasOwnProperty('token')) {
@@ -558,12 +532,13 @@ async function makeRequestForExportAsText(data) {
             mode: "cors"
         };
 
-        fetch(`https://draftpad.onrender.com/exportAsText`, options)
+        fetch(`http://localhost:5050/exportAsText`, options)
             .then((response) => response.blob())
             .then((myBlob) => {
                 // neeche waali 2 lines taaki note ka title mil sake
                 const idOfTheNote = (new URL(document.location.toString()).searchParams).get('id');
-                const noteIDKa = (returnedData.filter((cur) => cur.id === parseInt(idOfTheNote) && cur.type === 'note')).find((cur, ind) => ind === 0);
+                const fnc_items_already_loaded = (JSON.parse(sessionStorage.getItem('folder_note_container_items_already_loaded'))).flat(Infinity);
+                const noteIDKa = (fnc_items_already_loaded.filter((cur) => cur.id === parseInt(idOfTheNote) && cur.type === 'note')).find((cur, ind) => ind === 0);
 
                 // main kaam neeche se
                 const uri = URL.createObjectURL(myBlob);
@@ -589,12 +564,13 @@ async function makeRequestForExportAsPdf(data) {
             mode: "cors"
         };
 
-        fetch(`https://draftpad.onrender.com/exportAsPdf`, options)
+        fetch(`http://localhost:5050/exportAsPdf`, options)
             .then((response) => response.blob())
             .then((myBlob) => {
                 // neeche waali 2 lines taaki note ka title mil sake
                 const idOfTheNote = (new URL(document.location.toString()).searchParams).get('id');
-                const noteIDKa = (returnedData.filter((cur) => cur.id === parseInt(idOfTheNote) && cur.type === 'note')).find((cur, ind) => ind === 0);
+                const fnc_items_already_loaded = (JSON.parse(sessionStorage.getItem('folder_note_container_items_already_loaded'))).flat(Infinity);
+                const noteIDKa = (fnc_items_already_loaded.filter((cur) => cur.id === parseInt(idOfTheNote) && cur.type === 'note')).find((cur, ind) => ind === 0);
 
                 // main kaam neeche se
                 const uri = URL.createObjectURL(myBlob);

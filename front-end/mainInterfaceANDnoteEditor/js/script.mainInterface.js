@@ -10,6 +10,8 @@ const ccmMoveToFolderLI = document.querySelector('#ccm-move-to-folder-li');
 const ccmMoveToRootBTN = document.querySelector('#ccm-move-to-root-btn');
 const ccmDeleteLI = document.querySelector('#ccm-delete-li');
 const ccmRenameLI = document.querySelector('#ccm-rename-li');
+const ccmEditNoteLI = document.querySelector('#ccm-edit-note-li');
+const ccmViewNoteLI = document.querySelector('#ccm-view-note-li');
 let navigationArray = [];
 const navBackBtn = document.querySelector('#navigation-buttons-backBtn');
 const breadcrumbContainer = document.querySelector('#breadcrumbContainer');
@@ -25,9 +27,21 @@ let diasbleTheOpeningOfFolderOrNote = undefined;
 const logout_btn = document.querySelector('#logout-btn');
 let yehWaleFoldersYaNotesKeFullNamesKoHideKar = [];
 
-// let returnedData = [];
-// console.log(navBackBtn);
-// const dataItemsAlreadyLoaded = [];  //yeh bnayi gyi for fast go-back btn and fast breadcrumbs-onClick-rendering
+// note preview modal selectors and quill object
+const notePreviewDialog = document.querySelector('#note-preview-dialog');
+const notePreviewTitle = document.querySelector('#note-preview-title');
+const notePreviewEditBtn = document.querySelector('#note-preview-edit-btn');
+const notePreviewCloseBtn = document.querySelector('#note-preview-close-btn');
+const notePreviewEditorContainer = document.querySelector('#note-preview-editor');
+
+const notePreviewQuill = new Quill('#note-preview-editor', {
+    theme: 'snow',
+    readOnly: true,
+    modules: {
+        toolbar: false
+    }
+});
+
 
 
 const addressOfTheFrontWebsite = '../index.html';
@@ -35,7 +49,6 @@ const addressOfTheFrontWebsite = '../index.html';
 // notes-->
 // by default toh 'go back' btn ko enable rkhna hai lekin jese hee root pe aa jave user toh btn ko disable kr do
 // agar koi bhi databse se contact krne wala kaam ho raha hai toh successful changes ke badd success ya error ke msg ka ek toast display ho jaaye
-
 
 
 
@@ -53,7 +66,7 @@ body.addEventListener('click', (e) => {
                 cur.querySelector('#main-paragraph-of-folder').classList.add('make-invisible-the-p');
                 cur.querySelector('.temporary-para-of-folder').classList.remove('make-invisible-the-p');
             }
-            else if(cur.getAttribute('data-type') === 'note') {
+            else if (cur.getAttribute('data-type') === 'note') {
                 cur.querySelector('#main-paragraph-of-note').classList.add('make-invisible-the-p');
                 cur.querySelector('.temporary-para-of-note').classList.remove('make-invisible-the-p');
             }
@@ -65,82 +78,6 @@ body.addEventListener('contextmenu', (e) => e.preventDefault());
 
 // window ke event listeners
 window.addEventListener('load', () => {
-    // console.log(sessionStorage);
-    // if (sessionStorage.hasOwnProperty('currentFolderID')) {
-    //     // console.log('if\n', sessionStorage);
-
-    //     // agar pehle se currentFolderID avaiable h toh, fresh data ko fetch karo -->
-    //     (async () => {
-    //         try {
-    //             if (sessionStorage.currentFolderID === 'null') {
-    //                 returnedData = await window.allFetcherFunctions.fetchAllDataFunc();     // console.log(returnedData);
-    //                 navigationArray = JSON.parse(sessionStorage.navigationArray);
-
-    //                 if (returnedData.length === 0) {
-    //                     const tempPara = agarScreenKhaaliTohYehItemDaaloFunction(); //agar "folder-note container" khaali hai toh daal de "nothing to show"
-    //                     folderNoteContainer.appendChild(tempPara);
-    //                 }
-    //                 else {
-    //                     loadTheReturnedDataInTheContainer();
-    //                     // foldersKoBaccheAssignKaroAurContainerMeinDaaloFunction();
-    //                     breadcrumbsMeinChangesKrneWalaFunction();
-    //                 }
-    //             }
-    //             else {
-    //                 // console.log(sessionStorage);
-
-    //                 returnedData = await window.allFetcherFunctions.fetchAllDataOfParticularIdFunc(parseInt(sessionStorage.currentFolderID));     // console.log(returnedData);
-    //                 // console.log(returnedData);
-
-    //                 navigationArray = JSON.parse(sessionStorage.navigationArray);
-    //                 // console.log(navigationArray);
-
-
-    //                 renderTheReceivedDataFunction(returnedData); breadcrumbsMeinChangesKrneWalaFunction();
-
-    //                 // if (returnedData.length === 0) {
-    //                 //     const tempPara = agarScreenKhaaliTohYehItemDaaloFunction(); //agar "folder-note container" khaali hai toh daal de "nothing to show"
-    //                 //     folderNoteContainer.appendChild(tempPara);
-    //                 // }
-    //                 // else {
-    //                 //     loadTheReturnedDataInTheContainer();
-    //                 //     // foldersKoBaccheAssignKaroAurContainerMeinDaaloFunction();
-    //                 //     breadcrumbsMeinChangesKrneWalaFunction();
-    //                 // }
-    //             }
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     })();
-    // }
-    // else {
-    //     (async () => {
-    //         try {
-    //             sessionStorage.clear();     // console.log('else\n', sessionStorage);
-
-    //             returnedData = await window.allFetcherFunctions.fetchAllDataFunc();
-    //             // console.log(fetchedData);               
-
-    //             navigationArray.push(null); //iska mtlb hai ki yeh root page hai  
-
-    //             sessionStorage.currentFolderID = null; //koi folder opened nhi hai; ie, root elements
-    //             sessionStorage.navigationArray = JSON.stringify(navigationArray);
-
-    //             if (returnedData.length === 0) {
-    //                 const tempPara = agarScreenKhaaliTohYehItemDaaloFunction(); //agar "folder-note container" khaali hai toh daal de "nothing to show"
-    //                 folderNoteContainer.appendChild(tempPara);
-    //             }
-    //             else {
-    //                 loadTheReturnedDataInTheContainer(returnedData);
-    //                 // foldersKoBaccheAssignKaroAurContainerMeinDaaloFunction();
-    //                 breadcrumbsMeinChangesKrneWalaFunction();
-    //             }
-    //             // console.log(sessionStorage);
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     })();
-    // }
 
     // andar ghuste ke saath hee check krna hai ki localstorage mein token hai ya nhi for user authorization -->
     if (sessionStorage.getItem('first_time_user_checking_done') === 'true') {
@@ -151,6 +88,7 @@ window.addEventListener('load', () => {
                 const navArrFromSessionStorage = JSON.parse(sessionStorage.navigationArray);
                 // console.log(navArrFromSessionStorage);
                 returnedData = await window.allFetcherFunctions.fetchTheChildrenOfParentIDFunc(navArrFromSessionStorage[navArrFromSessionStorage.length - 1]);
+
 
                 if ((typeof returnedData) === 'string' && returnedData.includes('401')) {
                     window.location.href = addressOfTheFrontWebsite;
@@ -287,18 +225,6 @@ function closeTheFolderCreationModal() {
     inputOfCreateFolderModal.value = "";
 }
 
-// function newIDproviderForFolders(newFolder) {
-//     const allFoldersOfTheContainer = (folderNoteContainer.children.length === 0) ? [] : Array.from(folderNoteContainer.children).filter((cur) => cur.classList.contains('folder'));
-
-//     if (allFoldersOfTheContainer.length === 0) newFolder.querySelector('.icon').id = "folder1";
-//     else {
-//         let numberOflastFolderKiID = parseInt(((allFoldersOfTheContainer[allFoldersOfTheContainer.length - 1].id).substring(6)));
-//         newFolder.querySelector('.icon').id = "folder" + (numberOflastFolderKiID + 1);
-//     }
-
-//     return newFolder;
-// }
-
 // "create note" ka code -->
 const createNoteBtn = document.querySelector('#add-btn-menu-create-note');
 const createNoteDialog = document.querySelector('#create-note-dialog');
@@ -369,122 +295,7 @@ function closeTheNoteCreationModal() {
     inputOfCreateNoteModal.value = "";
 }
 
-// function newIDproviderForNotes(newNote) {
-//     const allNotesOfTheContainer = (folderNoteContainer.children.length === 0) ? [] : Array.from(folderNoteContainer.children).filter((cur) => cur.classList.contains('note'));
 
-//     if (allNotesOfTheContainer.length === 0) newNote.querySelector('.icon').id = "note1";
-//     else {
-//         let numberOflastNoteKiID = parseInt(((allNotesOfTheContainer[allNotesOfTheContainer.length - 1].id).substring(4)));
-//         newNote.querySelector('.icon').id = "note" + (numberOflastNoteKiID + 1);
-//     }
-
-//     return newNote;
-// }
-
-
-// loading the data ka code --> 
-// function loadTheReturnedDataInTheContainer(returnedData) {
-//     // console.log(returnedData);
-
-//     const saareRootMeinRehneWaaleItems = returnedData.filter((cur) => (cur.type === "folder" || cur.type === "note") && cur.parent_id === null);
-//     // console.log(saareRootMeinRehneWaaleItems);
-
-//     if (saareRootMeinRehneWaaleItems.length === 0) {
-//         const tempPara = agarScreenKhaaliTohYehItemDaaloFunction(); //agar "folder-note container" khaali hai toh daal de "nothing to show"
-//         folderNoteContainer.appendChild(tempPara);
-//     }
-//     else {
-//         saareRootMeinRehneWaaleItems.forEach((cur) => {
-//             if (cur.type === "folder") {
-//                 const newFolder = itemBanakeReturnKarNeWalaFunction("folder", "", cur);
-//                 folderNoteContainer.appendChild(newFolder);
-//             }
-//             else if (cur.type === "note") {
-//                 const newNote = itemBanakeReturnKarNeWalaFunction("note", "", cur);
-//                 folderNoteContainer.appendChild(newNote);
-//             }
-//         });
-//     }
-
-//     return saareRootMeinRehneWaaleItems;
-// }
-
-
-
-// let y = 0;
-// function foldersKoBaccheAssignKaroAurContainerMeinDaaloFunction() {
-//     let currentFoldersOfTheContainer = (Array.from(folderNoteContainer.children)).filter((cur) => cur.getAttribute('data-type') === "folder");
-//     let foldersLinkedWithRespectiveChildern = [];
-
-//     // mapping chl rhi hai folder ids aur unke respective children ki
-//     currentFoldersOfTheContainer.forEach((cur) => {
-//         let id = cur.getAttribute('data-id');
-//         // console.log(returnedData);
-//         let bacche = returnedData.filter((cur) => cur.parent_id === parseInt(id));
-//         let object = {
-//             "id": id,
-//             "bacche": bacche
-//         }
-//         foldersLinkedWithRespectiveChildern.push(object);
-//     });
-
-//     const onlyFoldersOfFolderNoteContainer = (Array.from(folderNoteContainer.children)).filter((cur) => cur.getAttribute("data-type") === "folder");
-//     const onlyNotesOfFolderNoteContainer = (Array.from(folderNoteContainer.children)).filter((cur) => cur.getAttribute("data-type") === "note");
-
-//     //foldernotecontainer ke folders ko click pe kaam krne ka code below
-//     onlyFoldersOfFolderNoteContainer.forEach((cur) => {
-//         cur.addEventListener('click', (e) => {
-//             if (diasbleTheOpeningOfFolderOrNote === true) { //yeh kra gya hai "rename" ke liye
-//                 e.stopPropagation();
-//                 return;
-//             }
-
-
-//             let idOfCURfolder = cur.getAttribute('data-id');
-//             let idKaFolder = foldersLinkedWithRespectiveChildern.filter((cur) => cur.id === idOfCURfolder);
-//             let idKaFolderKeBacche = idKaFolder[0].bacche;
-
-//             // pehle navigationArray ka code below -->
-//             navigationArray.push(idOfCURfolder); //currently opened folder ko array pe chadha diya
-//             if (navBackBtn.hasAttribute('disabled')) navBackBtn.removeAttribute('disabled'); //agar back btn disabled h toh usko enabled kr do
-//             breadcrumbsMeinChangesKrneWalaFunction();
-//             // console.log(navigationArray);
-
-//             //continuing with the process 
-//             folderNoteContainer.innerHTML = ""; //pehle waale maal ko khaali kro
-//             if (idKaFolderKeBacche.length === 0) {
-//                 const tempPara = agarScreenKhaaliTohYehItemDaaloFunction();
-//                 folderNoteContainer.appendChild(tempPara);
-//             }
-//             else {
-//                 idKaFolderKeBacche.forEach((cur) => {
-//                     if (cur.type === "folder") {
-//                         const newFolder = itemBanakeReturnKarNeWalaFunction("folder", "", cur);
-//                         folderNoteContainer.appendChild(newFolder);
-//                     }
-//                     else if (cur.type === "note") {
-//                         const newNote = itemBanakeReturnKarNeWalaFunction("note", "", cur);
-//                         folderNoteContainer.appendChild(newNote);
-//                     }
-//                 });
-//             }
-
-//             // foldersKoBaccheAssignKaroAurContainerMeinDaaloFunction();
-//         });
-//     });
-
-//     // folderNoteContainer ke notes ko click pe edit krne ka content below
-//     onlyNotesOfFolderNoteContainer.forEach((cur) => {
-//         cur.addEventListener('click', () => {
-//             let idOfCURnote = cur.getAttribute('data-id');
-//             // console.log(idKaNote);
-//             window.location.href = `note_editor.html?id=${idOfCURnote}`;
-//         });
-//     });
-
-// }
-
-// let z = 0;
 // navback button ka code below -->
 navBackBtn.addEventListener('click', () => {
     const navArrSessStrg = JSON.parse(sessionStorage.navigationArray);
@@ -532,10 +343,6 @@ navBackBtn.addEventListener('click', () => {
                 }
             });
         }
-
-        // console.log( JSON.parse( sessionStorage.getItem('folder_note_container_items_already_loaded') ) );
-
-        // foldersKoBaccheAssignKaroAurContainerMeinDaaloFunction();
     }
 
 });
@@ -613,7 +420,7 @@ function generateBreadcrumbs() {
             span.classList.add('breadcrumbContainer-span');
             span.setAttribute('data-id', null);
             span.innerText = `[ ${parseJwt().username} ]`;
-            document.querySelector('title').innerText = `${parseJwt().username} - Notes Web Application - Great Notes`; // webpage ke title mein daaling the username
+            document.querySelector('title').innerText = `${parseJwt().username} - Notes Web Application - DraftPad`; // webpage ke title mein daaling the username
             spansKiArray.push(span);
         }
         else {
@@ -663,116 +470,6 @@ function parseJwt() {
 }
 
 
-// let a = 0;
-
-// function breadcrumbsMeinChangesKrneWalaFunction() {
-//     breadcrumbContainer.innerHTML = ""; //pehle waale maal ko khaali kar
-//     const spansKiArray = [];
-
-
-//     // spansKiArray ke andar spans going below -->
-//     navigationArray.forEach((cur, index) => {
-//         if (cur === null) {
-//             const span = document.createElement('span');
-//             span.classList.add('breadcrumbContainer-span');
-//             span.innerText = `[${parseJwt().username}]`;
-
-//             span.addEventListener('click', () => {
-//                 // sessionStorage.navigationArray = JSON.stringify(navigationArray);
-
-//                 folderNoteContainer.innerHTML = "";
-//                 navBackBtn.setAttribute('disabled', "true");
-//                 (async () => {
-//                     try {
-//                         const data = await window.allFetcherFunctions.fetchAllDataFunc();
-//                         loadTheReturnedDataInTheContainer(data);
-//                         // foldersKoBaccheAssignKaroAurContainerMeinDaaloFunction();
-//                         navArrayKoUpdateKrneWalaFunc(0);
-//                         breadcrumbsMeinChangesKrneWalaFunction();
-//                     } catch (error) {
-//                         console.error(error);
-//                     }
-//                 })();
-//             });
-
-//             spansKiArray.push(span);
-//         }
-//         else {
-//             const intID = parseInt(cur);
-//             // const idPeFolder = returnedData.filter((cur) => cur.id === intID && cur.type === "folder");
-//             (async () => {
-//                 try {
-//                     const idPeFolder = await window.allFetcherFunctions.fetchTheParticularFolderAtIDfunc(intID);
-
-//                     const span = document.createElement('span');
-//                     span.classList.add('breadcrumbContainer-span');
-//                     span.innerText = idPeFolder[0].title;
-
-//                     span.addEventListener('click', () => {
-//                         folderNoteContainer.innerHTML = "";
-//                         let idKaFolderKeBacche = returnedData;
-
-//                         if (idKaFolderKeBacche.length === 0) {
-//                             const tempPara = agarScreenKhaaliTohYehItemDaaloFunction();
-//                             folderNoteContainer.appendChild(tempPara);
-//                         }
-//                         else {
-//                             idKaFolderKeBacche.forEach((current) => {
-//                                 if (current.type === "folder") {
-//                                     const newFolder = itemBanakeReturnKarNeWalaFunction("folder", "", current);
-//                                     folderNoteContainer.appendChild(newFolder);
-//                                 }
-//                                 else if (current.type === "note") {
-//                                     const newNote = itemBanakeReturnKarNeWalaFunction("note", "", current);
-//                                     folderNoteContainer.appendChild(newNote);
-//                                 }
-//                             });
-//                         }
-
-//                         // foldersKoBaccheAssignKaroAurContainerMeinDaaloFunction();
-//                         navArrayKoUpdateKrneWalaFunc(index);
-//                         breadcrumbsMeinChangesKrneWalaFunction();
-//                     });
-
-//                     spansKiArray.push(span);
-//                 } catch (error) {
-//                     console.error(error);
-//                 }
-//             })();
-//         }
-//     });
-
-//     // spansKiArray ke items going in the container ka code below -->
-//     if (spansKiArray.length === 1) {
-//         breadcrumbContainer.appendChild(spansKiArray[0]);
-//     }
-//     else {
-//         for (let i = 0; i < spansKiArray.length; i++) {
-//             if (i === 0) {
-//                 const textEl = document.createTextNode(' > ');
-//                 breadcrumbContainer.appendChild(spansKiArray[0]);
-//                 breadcrumbContainer.appendChild(textEl);
-//             }
-//             else if (i === spansKiArray.length - 1) {
-//                 breadcrumbContainer.appendChild(spansKiArray[i]);
-//             }
-//             else {
-//                 const textEl = document.createTextNode(' > ');
-//                 breadcrumbContainer.appendChild(spansKiArray[i]);
-//                 breadcrumbContainer.appendChild(textEl);
-//             }
-//         }
-//     }
-//     // console.log(spansKiArray);
-// }
-
-
-
-
-// let b = 0;
-
-// let c = 0;
-
 // "folder-note container" ke event listeners
 let mainItemNotimgORp = undefined, folderJiskeAndarDaalnaHai = undefined, folderToBeChanged = undefined, indexOfFolderToBeChanged = -1, indexOfNoteToBeChanged = -1, someRowIsSelected = undefined, noteToBeChanged = undefined, returnedData = null;
 const messageDIV = document.querySelector('#move-to-folder-dialog-messageDIV');
@@ -801,12 +498,22 @@ folderNoteContainer.addEventListener('contextmenu', (e) => {
         const idOfTheItem = parseInt(mainItemNotimgORp.getAttribute('data-id'));
         const typeOfTheItem = mainItemNotimgORp.getAttribute('data-type');
 
-        const fncItemsAlreadyLoaded = (JSON.parse(sessionStorage.getItem('folder_note_container_items_already_loaded'))).flat(Infinity);
-        if (((fncItemsAlreadyLoaded.filter((cur) => cur.id === idOfTheItem && cur.type === typeOfTheItem)).find((cur, index) => index === 0)).parent_id !== null) {
-            ccmMoveToRootBTN.removeAttribute('disabled');
+        // "edit note" ko enable for notes and disable for folder ke liye -->
+        if (typeOfTheItem === 'note') {
+            ccmEditNoteLI.style.display = 'block';
+            ccmViewNoteLI.style.display = 'block';
         }
         else {
-            ccmMoveToRootBTN.setAttribute('disabled', 'true');
+            ccmEditNoteLI.style.display = 'none';
+            ccmViewNoteLI.style.display = 'none';
+        }
+
+        const fncItemsAlreadyLoaded = (JSON.parse(sessionStorage.getItem('folder_note_container_items_already_loaded'))).flat(Infinity);
+        if (((fncItemsAlreadyLoaded.filter((cur) => cur.id === idOfTheItem && cur.type === typeOfTheItem)).find((cur, index) => index === 0)).parent_id !== null) {
+            ccmMoveToRootBTN.classList.remove('disabled-context-menu-option');
+        }
+        else {
+            ccmMoveToRootBTN.classList.add('disabled-context-menu-option');
         }
     }
 });
@@ -950,13 +657,6 @@ folderNoteContainer.addEventListener('click', (e) => {
                     fncItemsAlreadyLoaded.push(receivedData);
                     sessionStorage.setItem('folder_note_container_items_already_loaded', JSON.stringify([fncItemsAlreadyLoaded]));
                     generateBreadcrumbs();
-                    // console.log(fncItemsAlreadyLoaded);
-
-                    // console.log( JSON.parse( sessionStorage.getItem('folder_note_container_items_already_loaded') ) );
-
-                    // const dataItemsAlreadyLoadedSessStrg = JSON.parse(sessionStorage.dataItemsAlreadyLoaded);
-                    // dataItemsAlreadyLoadedSessStrg.push(receivedData);
-                    // sessionStorage.dataItemsAlreadyLoaded = JSON.stringify(dataItemsAlreadyLoadedSessStrg);
                 }
 
             } catch (error) {
@@ -992,7 +692,8 @@ folderNoteContainer.addEventListener('click', (e) => {
 
         // ab main kaam shuru kring -->
         const id_of_clicked_note = parseInt(mainNote.getAttribute('data-id'));
-        window.location.href = `note_editor.html?id=${id_of_clicked_note}`;
+        // window.location.href = `note_editor.html?id=${id_of_clicked_note}`;
+        openNotePreviewModal(id_of_clicked_note);
     }
 });
 function renderTheReceivedDataFunction(receivedData) {
@@ -1056,26 +757,6 @@ function moveToFolderDialogKeAndarMaalLoadKarneWalaFunction(id, dataType) {
             });
             // console.log(validFoldersArray);
 
-
-            //folder to table data below; neeche wala table stucture follow kra jaega-->
-            // <table>
-            //     <tr>
-            //         <th>Folder</th>
-            //         <th>Parent</th>
-            //     </tr>
-            //     <tr>
-            //         <td>beta1</td>
-            //         <td>baap1</td>
-            //     </tr>
-            //     <tr>
-            //         <td>beta2</td>
-            //         <td>baap1</td>
-            //     </tr>
-            //     <tr>
-            //         <td>beta3</td>
-            //         <td>baap3</td>
-            //     </tr>
-            // </table>
             const table = document.createElement('table');
             const tr = document.createElement('tr');
             const th1 = document.createElement('th');
@@ -1115,25 +796,6 @@ function moveToFolderDialogKeAndarMaalLoadKarneWalaFunction(id, dataType) {
             itemContainer.appendChild(itemNTS);
         }
         else {
-            //folder to table data below; neeche wala table stucture follow kra jaega-->
-            // <table>
-            //     <tr>
-            //         <th>Folder</th>
-            //         <th>Parent</th>
-            //     </tr>
-            //     <tr>
-            //         <td>beta1</td>
-            //         <td>baap1</td>
-            //     </tr>
-            //     <tr>
-            //         <td>beta2</td>
-            //         <td>baap1</td>
-            //     </tr>
-            //     <tr>
-            //         <td>beta3</td>
-            //         <td>baap3</td>
-            //     </tr>
-            // </table>
             const table = document.createElement('table');
             const tr = document.createElement('tr');
             const th1 = document.createElement('th');
@@ -1175,8 +837,6 @@ ccmMoveToFolderLI.addEventListener('click', () => {
                 }
             }
 
-            // returnedData = window.currentState.data;
-            // console.log(window.currentState);
         } catch (error) {
             console.error(error)
         }
@@ -1320,6 +980,12 @@ function moveToFolderDialogKoCloseKrneWalaFunction() {
 }
 // "move to root" ka code below -->
 ccmMoveToRootBTN.addEventListener('click', (e) => {
+    if (
+        ccmMoveToRootBTN.classList.contains('disabled-context-menu-option')
+    ) {
+        return;
+    }
+
     if (mainItemNotimgORp) {
         const type = mainItemNotimgORp.getAttribute('data-type');
         const id = parseInt(mainItemNotimgORp.getAttribute('data-id'));
@@ -1350,6 +1016,41 @@ ccmDeleteLI.addEventListener('click', () => {
         confirmationDialogOpenedFor = "delete";
     }
 });
+// "view note" ka code below -->
+ccmViewNoteLI.addEventListener('click', () => {
+
+    if (
+        mainItemNotimgORp &&
+        mainItemNotimgORp.getAttribute('data-type') === 'note'
+    ) {
+
+        customContextMenu.style.display = 'none';
+
+        const noteId = parseInt(
+            mainItemNotimgORp.getAttribute('data-id')
+        );
+
+        openNotePreviewModal(noteId);
+    }
+
+});
+// "edit note" ka code below -->
+ccmEditNoteLI.addEventListener('click', () => {
+
+    if (
+        mainItemNotimgORp &&
+        mainItemNotimgORp.getAttribute('data-type') === 'note'
+    ) {
+
+        const noteId = parseInt(
+            mainItemNotimgORp.getAttribute('data-id')
+        );
+
+        window.location.href = `note_editor.html?id=${noteId}`;
+    }
+
+});
+
 // "rename" ka code below -->
 ccmRenameLI.addEventListener('click', () => {
     if (mainItemNotimgORp && mainItemNotimgORp.getAttribute('data-type') === "folder") {
@@ -1590,6 +1291,45 @@ logout_btn.addEventListener('click', () => {
     confirmationDialogOpenedFor = "logout_operation";
 });
 
+function openNotePreviewModal(noteId) {
+
+    const fnc_items_already_loaded = (
+        JSON.parse(
+            sessionStorage.getItem('folder_note_container_items_already_loaded')
+        )
+    ).flat(Infinity);
+
+    const noteObj = (
+        fnc_items_already_loaded.filter(
+            (cur) => cur.id === parseInt(noteId) && cur.type === 'note'
+        )
+    ).find((cur, ind) => ind === 0);
+
+    if (!noteObj) return;
+
+    notePreviewTitle.innerText = noteObj.title;
+
+    const delta_obj = JSON.parse(noteObj.content);
+
+    notePreviewQuill.setContents(delta_obj);
+
+    notePreviewEditBtn.onclick = () => {
+        window.location.href = `note_editor.html?id=${noteId}`;
+    };
+
+    notePreviewDialog.showModal();
+    setTimeout(() => {
+        notePreviewDialog.classList.add('open-create-dialog-class');
+    }, 10);
+}
+notePreviewCloseBtn.addEventListener('click', () => {
+    notePreviewDialog.classList.remove('open-create-dialog-class');
+
+    setTimeout(() => {
+        notePreviewDialog.close();
+    }, 300);
+});
+
 // utlitly functions ka code below -->
 function itemBanakeReturnKarNeWalaFunction(item, action, cur = undefined) {
     navigationArray = JSON.parse(sessionStorage.navigationArray);
@@ -1641,15 +1381,6 @@ function itemBanakeReturnKarNeWalaFunction(item, action, cur = undefined) {
         newNote.querySelector('.icon').setAttribute("data-type", "note");
         newNote.querySelector('.icon').setAttribute("parent-id", navigationArray.at(navigationArray.length - 1)); //only for database purposes
 
-        // context-menu ke liye -->
-        // newNote.querySelector('.icon').addEventListener('contextmenu', (e) => {
-        //     e.preventDefault(); //jo by-default khulta usse band kro
-
-        //     customContextMenu.style.left = e.clientX + "px";
-        //     customContextMenu.style.top = e.clientY + "px";
-
-        //     customContextMenu.style.display = "block";
-        // });
 
         //note-name shortener -->
         if (newNote.querySelector('p').textContent.length > 15) {
@@ -1670,15 +1401,6 @@ function itemBanakeReturnKarNeWalaFunction(item, action, cur = undefined) {
         newNote.querySelector('.icon').setAttribute("data-id", cur.id);
         newNote.querySelector('.icon').setAttribute("data-type", "note");
 
-        // context-menu ke liye -->
-        // newNote.querySelector('.icon').addEventListener('contextmenu', (e) => {
-        //     e.preventDefault(); //jo by-default khulta usse band kro
-
-        //     customContextMenu.style.left = e.clientX + "px";
-        //     customContextMenu.style.top = e.clientY + "px";
-
-        //     customContextMenu.style.display = "block";
-        // });
 
         //note-name shortener -->
         if (newNote.querySelector('p').textContent.length > 15) {
@@ -1694,12 +1416,18 @@ function itemBanakeReturnKarNeWalaFunction(item, action, cur = undefined) {
 }
 
 function agarScreenKhaaliTohYehItemDaaloFunction() {
-    const tempPara = document.createElement('p');
-    tempPara.id = "tempFolderNoteContainerPara";
-    tempPara.style = `position:absolute; top:50%; left:50%; transform: translate(-50%, -50%); font-family: "Montserrat", sans-serif; font-weight:700; font-size:1.5rem; text-wrap: nowrap;`
-    tempPara.innerHTML = "&#x26A0; Nothing To Show &#x26A0;";
+    const wrapper = document.createElement('div');
 
-    return tempPara;
+    wrapper.id = 'tempFolderNoteContainerPara';
+    wrapper.classList.add('empty-state-wrapper');
+
+    const img = document.createElement('img');
+    img.src = 'images/empty.png';
+    img.alt = 'Empty State';
+
+    wrapper.appendChild(img);
+
+    return wrapper;
 }
 
 function idKeChildrenANDgrandchildrenReturnFunction(integerID, allFolders, accArr) {

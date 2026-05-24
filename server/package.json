@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "The server for notes-app",
+  "description": "The server for DraftPad app",
   "license": "ISC",
   "author": "Ritik sharma",
   "type": "module",

@@ -11,7 +11,6 @@ const loginEmailIp = document.getElementById('login_email');
 const loginPasswordIp = document.getElementById('login_password');
 const loginMsgDiv = document.getElementById('login-msg-div');
 
-//localstrg ko clear kra jaa rha hai at successful login
 
 // Show or hide signup form
 signupLoginLink.forEach(link => {
@@ -35,7 +34,7 @@ signupForm.addEventListener('submit', (e) => {
                     auth_provider: 'local'
                 };
 
-                const resp = await fetch('https://draftpad.onrender.com/signup', {
+                const resp = await fetch('http://localhost:5050/signup', {
                     method: "POST",
                     mode: "cors",
                     headers: {
@@ -121,7 +120,7 @@ loginForm.addEventListener('submit', (e)=>{
                 email: loginEmailIp.value,
                 password: loginPasswordIp.value,
             };
-            const resp = await fetch(`https://draftpad.onrender.com/login`, {
+            const resp = await fetch(`http://localhost:5050/login`, {
                 method: "POST",
                 mode: "cors",
                 headers: {
@@ -148,4 +147,31 @@ loginForm.addEventListener('submit', (e)=>{
             console.error(error);
         }
     })();
+});
+
+
+// -------------------- Password Show/Hide Toggle Engine -------------------- //
+
+const passwordEyes = document.querySelectorAll('.toggle-password-eye');
+
+passwordEyes.forEach(eye => {
+    eye.addEventListener('click', () => {
+        const passwordInput = eye.parentElement.querySelector('input');
+        
+        if (passwordInput.type === 'password') {
+            // State: MASKED -> VISIBLE
+            passwordInput.type = 'text';
+            
+            // Swap to the crossed-out eye glyph icon cleanly
+            eye.classList.remove('ri-eye-line');
+            eye.classList.add('ri-eye-off-line');
+        } else {
+            // State: VISIBLE -> MASKED
+            passwordInput.type = 'password';
+            
+            // Swap back to the regular eye glyph icon cleanly
+            eye.classList.remove('ri-eye-off-line');
+            eye.classList.add('ri-eye-line');
+        }
+    });
 });
