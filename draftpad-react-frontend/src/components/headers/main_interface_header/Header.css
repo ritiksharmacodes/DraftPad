@@ -3,20 +3,3 @@
     align-items: center;
     justify-content: space-between;
 }
-
-.navigation-buttons button {
-	font-family: "Montserrat", sans-serif;
-	padding: 0.2em 0.9em;
-	font-weight: 800;
-	background: #00000000;
-	border-radius: 10px;
-}
-
-.navigation-buttons button:hover:enabled {
-	cursor: pointer;
-	background-color: #e6e6e6;
-}
-
-.navigation-buttons button:active:enabled {
-	background-color: #c3c3c3;
-}
