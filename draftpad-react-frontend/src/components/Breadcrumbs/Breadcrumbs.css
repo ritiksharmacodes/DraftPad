@@ -1,0 +1,26 @@
+.breadcrumbContainer {
+	font-family: "Montserrat", sans-serif;
+	font-weight: 800;	
+	margin-top: 2.5em;
+	margin-bottom: 1.5em;
+}
+
+.breadcrumbContainer-span {
+	cursor: pointer;
+	padding: 0.4em 0.9em 0.4em 0;
+}
+
+.breadcrumbContainer-span:hover {
+	text-decoration: underline;
+}
+
+.breadcrumbContainer-span:active {
+	background-color: rgb(218, 218, 218);
+	border-radius: 10px;
+}
+
+/* New optional styling rule just to space out the chevrons evenly */
+.breadcrumb-separator {
+    margin-right: 0.9em;
+    color: #888; /* Dimmed slightly for cleaner visual balance */
+}

@@ -121,3 +121,11 @@
 	background: white;
 	border: 1px solid black;
 }
+
+
+/* confirmation dialog ke buttons ki css */
+.confirmation-dialog-btn {
+	padding: 0.2em 0.9em;
+	cursor: pointer;
+	font-family: "Montserrat", sans-serif;
+}
