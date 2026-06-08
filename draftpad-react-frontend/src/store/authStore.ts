@@ -15,17 +15,23 @@ type FullStoreType = AuthStore & AuthActions;
 
 export const useAuthStore = create<FullStoreType>((set, get) => ({
     // INITIAL STATE
-    token: "",
-    isAuthenticated: false,
+    token: localStorage.getItem("token") ?? "",
+    isAuthenticated: !!(localStorage.getItem("token")),
 
     // ACTIONS
     actions: {
-        
-        logout: () => set(() => {
+
+        logout: () => {
             sessionStorage.clear();
             localStorage.clear();
+
+            set({
+                token: "",
+                isAuthenticated: false,
+            });
+
             window.location.reload();
-        }),
+        },
 
     }
 }));

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useWorkspaceStore } from './useWorkspaceStore';
+import { useWorkspaceStore } from '../../store/workspaceStore.ts';
 import "./Breadcrumbs.css";
 
 // export function Breadcrumbs() {
@@ -54,39 +54,9 @@ import "./Breadcrumbs.css";
 // }
 
 export function Breadcrumbs() {
-    // 1. Grab state and navigation actions from your Zustand store
     const navigationPath = useWorkspaceStore((state) => state.navigationPath);
     const folders = useWorkspaceStore((state) => state.folders);
-    
-    // Assuming your state has a navigateTo action to jump to a specific folder index
-    const { navigateTo } = useWorkspaceStore((state) => state.actions);
-
-    // Mock username—replace this with your actual auth/JWT logic variables
-    const username = "User"; 
-
-    // 2. Automatically sync the document webpage title when navigation changes
-    useEffect(() => {
-        const currentFolderId = navigationPath[navigationPath.length - 1];
-        
-        if (currentFolderId === null) {
-            document.title = `${username} - Notes Web Application - DraftPad`;
-        } else {
-            const currentFolder = folders.find(f => f.id === currentFolderId);
-            if (currentFolder) {
-                document.title = `${currentFolder.title} - DraftPad`;
-            }
-        }
-    }, [navigationPath, folders, username]);
-
-    // 3. Handle jumping back when a user clicks a breadcrumb higher up the chain
-    const handleBreadcrumbClick = (targetFolderId: number | null, index: number) => {
-        // Truncate the navigation path up to the clicked breadcrumb's index
-        const updatedPath = navigationPath.slice(0, index + 1);
-        // sessionStorage.setItem("navigationArray", JSON.stringify(updatedPath)); 
-        
-        // Update your store state (assuming your store updates navigationPath)
-        useWorkspaceStore.setState({ navigationPath: updatedPath });
-    };
+    const navigateToBreadcrumb = useWorkspaceStore((state)=>state.actions.navigateToBreadcrumb);
 
     return (
         // Matches your <div id="breadcrumbContainer"></div> perfectly
@@ -95,10 +65,11 @@ export function Breadcrumbs() {
                 const isLast = index === navigationPath.length - 1;
                 
                 // Determine the visible text name
-                let displayTitle = `[ ${username} ]`;
-                if (folderId !== null) {
-                    const matchedFolder = folders.find(f => f.id === folderId);
-                    displayTitle = matchedFolder ? matchedFolder.title : `Folder ${folderId}`;
+                let displayTitle:string;
+                if (folderId === null) {
+                    displayTitle = `[REPLACE_WITH_THE_USRNAME_OF_THE_USER]`;
+                } else {
+                    displayTitle = `${(folders.find((folder)=>folder.id === folderId))?.title}`;
                 }
 
                 return (
@@ -107,7 +78,7 @@ export function Breadcrumbs() {
                         <span 
                             className="breadcrumbContainer-span" 
                             data-id={folderId ?? "null"}
-                            onClick={() => handleBreadcrumbClick(folderId, index)}
+                            onClick={() => navigateToBreadcrumb(index)}
                         >
                             {displayTitle}
                         </span>

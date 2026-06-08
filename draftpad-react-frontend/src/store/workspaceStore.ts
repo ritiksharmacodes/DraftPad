@@ -47,6 +47,7 @@ type WorkspaceActions = {
         setError: (errorMessage: string | null) => void;
         enterFolder: (folderID : number) => void;
         goBack: () => void;
+        navigateToBreadcrumb: (breadcrumbIndex: number)=>void;
     }
 }
 
@@ -95,6 +96,12 @@ export const useWorkspaceStore = create<FullStoreType>((set, get) => ({
     
             // 3. Return the state update. React takes over the rendering pipeline automatically!
             return { navigationPath: updatedPath };
+        }),
+
+        navigateToBreadcrumb: (breadcrumbIndex)=>set((state)=>{
+            const updatedPath = state.navigationPath.slice(0, breadcrumbIndex + 1);
+            sessionStorage.setItem("navigationArray", JSON.stringify(updatedPath));
+            return {navigationPath: updatedPath};
         }),
 
     }

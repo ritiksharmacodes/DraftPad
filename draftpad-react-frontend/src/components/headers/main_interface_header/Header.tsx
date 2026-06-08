@@ -1,11 +1,17 @@
+import { useState } from "react";
 import "./Header.css";
 import Button from "../../button/Button.tsx";
+import ConfirmationDialog from "../../Dialogs/ConfirmationDialog/ConfirmationDialog.tsx";
 import { useWorkspaceStore } from "../../../store/workspaceStore.ts";
+import { useAuthStore } from "../../../store/authStore.ts";
 
-const navigationPath = useWorkspaceStore( state => state.navigationPath );
-const goBack = useWorkspaceStore( state=> state.actions.goBack );
 
 function Header() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const navigationPath = useWorkspaceStore(state => state.navigationPath);
+  const goBack = useWorkspaceStore(state => state.actions.goBack);
+  const logout = useAuthStore(state => state.actions.logout);
+
   return (
     <div className="header">
       <div className="navigation-buttons">
@@ -16,7 +22,18 @@ function Header() {
           onClickFunc={goBack}
         />
       </div>
-      <Button btn_label="LOGOUT" btn_classes="logout-btn" />
+      <Button
+        btn_label="LOGOUT"
+        btn_classes="logout-btn"
+        onClickFunc={() => setIsDialogOpen(true)}
+      />
+
+      <ConfirmationDialog
+        isOpen={isDialogOpen}
+        message={`logout?`}
+        onCancel={() => setIsDialogOpen(false)}
+        onConfirm={logout}
+      />
     </div>
   )
 }
